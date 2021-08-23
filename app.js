@@ -107,8 +107,8 @@ setInterval(async() => {
     var ISTOffset = 330;   // IST offset UTC +5:30 
     var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
     var hours = ISTTime.getHours();
-    console.log(await nse_token(),'hourshours')
-    // try{
+    try{
+        console.log(await nse_token(),'hourshours')
         // if(hours >= 9 && hours <= 24){
             const token = await nse_token();
             console.log(token,'token123231')
@@ -136,9 +136,9 @@ setInterval(async() => {
             });
             newRow && newRow.length > 0 && saveData(newRow);
         // }
-    // }catch(err){
-    //     console.log(err,'errrior')
-    // }
+    }catch(err){
+        console.log(err,'errrior')
+    }
 },6000);
 
 
