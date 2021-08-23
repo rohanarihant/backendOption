@@ -1,0 +1,11 @@
+runtime: nodejs
+env: flex
+
+env_variables:
+  SQL_USER : root
+  SQL_PASSWORD: "roottoor"
+  SQL_DATABASE: open-interest
+  INSTANCE_CONNNECTION_NAME: humanity-app-70de9:us-central1:open-interest
+
+beta_settings:
+  cloud_sql_instances: humanity-app-70de9:us-central1:open-interest
