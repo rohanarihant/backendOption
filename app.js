@@ -107,7 +107,7 @@ setInterval(async() => {
     var ISTOffset = 330;   // IST offset UTC +5:30 
     var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
     var hours = ISTTime.getHours();
-    console.log(hours,'hourshours')
+    console.log(await nse_token(),'hourshours')
     // try{
         // if(hours >= 9 && hours <= 24){
             const token = await nse_token();
