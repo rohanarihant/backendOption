@@ -12,6 +12,13 @@ const port = 5000;
 app.use(express.static('public'))
 app.use(cors());
 const sql = require("./db.js");
+
+axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }}).then((data) => {
+    console.log(data,'data daataa')
+   })
+   .catch((err) => console.log(err,'error in catch'))
+
+
 app.get('/', (req, res) => res.redirect('/index.html'));
 app.get('/chain', async (req, res) => {
     try{
