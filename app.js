@@ -115,9 +115,11 @@ setInterval(async() => {
             const response = "";
             axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }}).then((data) => {
                 console.log(data,'data daataa')
+                response = data;
                })
                .catch((err) => console.log(err,'error in catch'))
             const newRow = [];
+            console.log(response,'responseresponse')
             let expiryDates = response.data.records.expiryDates;
             let underlyingValue = response.data.records.underlyingValue;
             selected_expiry = response.data.records.expiryDates[0];
