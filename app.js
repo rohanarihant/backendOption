@@ -110,13 +110,10 @@ setInterval(async() => {
     console.log(hours,'hourshours')
     // try{
         // if(hours >= 9 && hours <= 24){
-            // console.log(await nse_token(),'sfdafsdfsad')
-            // const token = await nse_token();
-            // console.log(token,'token123231')
+            const token = await nse_token();
+            console.log(token,'token123231')
             const response = await axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }})
-            // console.log(response,'response123231')
             const newRow = [];
-            // console.log(response && response.data && response.data.filtered && response.data.filtered.data,'response && response.data && response.data.filtered && response.data.filtered.data')
             let expiryDates = response.data.records.expiryDates;
             let underlyingValue = response.data.records.underlyingValue;
             selected_expiry = response.data.records.expiryDates[0];
