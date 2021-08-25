@@ -13,10 +13,14 @@ app.use(express.static('public'))
 app.use(cors());
 const sql = require("./db.js");
 
-axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { timeout: 10000 }).then((data) => {
-    console.log(data,'data daataa')
-   })
-   .catch((err) => console.log(err,'error in catch'))
+try{
+    axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { timeout: 10000 }).then((data) => {
+        console.log(data,'data daataa')
+       })
+       .catch((err) => console.log(err,'error in catch'))
+}catch(ettot){
+    console.log(ettot,'ettotettot ettot')
+}
 
 
 app.get('/', (req, res) => res.redirect('/index.html'));
