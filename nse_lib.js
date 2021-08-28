@@ -20,7 +20,6 @@ function isJson(text) {
 }
 
 function getOptionChain(instrument, token) {
-  console.log(token,'tokentoken')
   return new Promise((resolve, reject) => {
     execute(`curl 'https://www.nseindia.com/api/option-chain-indices?symbol=${instrument}' \
     -H 'authority: www.nseindia.com' \
@@ -33,9 +32,9 @@ function getOptionChain(instrument, token) {
     -H 'sec-fetch-mode: navigate' \
     -H 'sec-fetch-user: ?1' \
     -H 'sec-fetch-dest: document' \
-    -H 'set-cookie: ${token}' \
     -H 'accept-language: en-IN,en;q=0.9,en-GB;q=0.8,en-US;q=0.7,hi;q=0.6,mr;q=0.5' \
     --compressed`, function (resp) {
+      console.log(resp,'resprespresp')
       let isValidData = isJson(resp);
       console.log(isValidData,'isValidData')
       if (isValidData) {
