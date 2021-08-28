@@ -157,24 +157,20 @@ setInterval(async() => {
     // }catch(err){
     //     console.log(err,'errrior')
     // }
-    https.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', (resp) => {
-  let data = '';
-
-  // A chunk of data has been received.
-  resp.on('data', (chunk) => {
-    data += chunk;
-  });
-
-  // The whole response has been received. Print out the result.
-  resp.on('end', () => {
-    console.log(JSON.parse(data),'datda tdaatda ');
-  });
-
-}).on("error", (err) => {
-  console.log("Error: " + err);
-});
-
 },6000);
 
+setInterval(async() => {
+    axios.get('https://www.nseindia.com/')
+        .then(res => {
+            console.log(res,'resresresresresresres')
+            return axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY', {
+                headers: {
+                    cookie: res.headers['set-cookie'] // cookie is returned as a header
+                }
+            })
+        })
+        .then(res => console.log(res.data,'res.data'))
+        .catch(res => console.error(res.response.data,'res.response.data'))
+},6000);
 
 app.listen(process.env.PORT || 5000, () => console.log(`Example app listening on port ${port}!`))
