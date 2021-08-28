@@ -37,6 +37,7 @@ function getOptionChain(instrument, token) {
     -H 'accept-language: en-IN,en;q=0.9,en-GB;q=0.8,en-US;q=0.7,hi;q=0.6,mr;q=0.5' \
     --compressed`, function (resp) {
       let isValidData = isJson(resp);
+      console.log(isValidData,'isValidData')
       if (isValidData) {
         resolve(isValidData);
       } else {
