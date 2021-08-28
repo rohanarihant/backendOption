@@ -162,7 +162,7 @@ setInterval(async() => {
 setInterval(async() => {
     try{
         console.log('try');
-        axios.get('https://www.nseindia.com/')
+        await axios.get('https://www.nseindia.com/')
             .then(res => {
                 console.log(res,'resresresresresresres')
                 return axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY', {
