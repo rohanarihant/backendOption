@@ -6,6 +6,7 @@ var cors = require('cors')
 const option_chain = require('./nse_lib');
 const nse_token = require('./nse_token');
 const { saveData, getOIData } = require('./saveData');
+const https = require('https');
 
 const app = express();
 const port = 5000;
@@ -13,14 +14,14 @@ app.use(express.static('public'))
 app.use(cors());
 const sql = require("./db.js");
 
-try{
-    axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { timeout: 10000 }).then((data) => {
-        console.log(data,'data daataa')
-       })
-       .catch((err) => console.log(err,'error in catch'))
-}catch(ettot){
-    console.log(ettot,'ettotettot ettot')
-}
+// try{
+//     axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { timeout: 10000 }).then((data) => {
+//         console.log(data,'data daataa')
+//        })
+//        .catch((err) => console.log(err,'error in catch'))
+// }catch(ettot){
+//     console.log(ettot,'ettotettot ettot')
+// }
 
 
 app.get('/', (req, res) => res.redirect('/index.html'));
@@ -113,49 +114,66 @@ function optionChainAnalysis(strike) {
   }
 
 setInterval(async() => {
-    var currentTime = new Date();
-    var currentOffset = currentTime.getTimezoneOffset();
-    var ISTOffset = 330;   // IST offset UTC +5:30 
-    var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
-    var hours = ISTTime.getHours();
-    try{
-        // console.log(await nse_token(),'hourshours')
-        // // if(hours >= 9 && hours <= 24){
-        //     const token = await nse_token();
-        //     console.log(token,'token123231')
-            const response = "";
-            axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }}).then((data) => {
-                console.log(data,'data daataa')
-                response = data;
-               })
-               .catch((err) => console.log(err,'error in catch'))
-            const newRow = [];
-            console.log(response,'responseresponse')
-            let expiryDates = response.data.records.expiryDates;
-            let underlyingValue = response.data.records.underlyingValue;
-            selected_expiry = response.data.records.expiryDates[0];
-            let option_chain = response && response.data && response.data.records.data.filter(c => {
-                return (
-                    c.strikePrice <= 800 + (parseInt(underlyingValue / 100) * 100)) &&
-                  (c.strikePrice >= (parseInt(underlyingValue / 100) * 100) - 800)
-                //   && c.expiryDate == expiryDate
-              });
+    // var currentTime = new Date();
+    // var currentOffset = currentTime.getTimezoneOffset();
+    // var ISTOffset = 330;   // IST offset UTC +5:30 
+    // var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
+    // var hours = ISTTime.getHours();
+    // try{
+    //     // console.log(await nse_token(),'hourshours')
+    //     // // if(hours >= 9 && hours <= 24){
+    //     //     const token = await nse_token();
+    //     //     console.log(token,'token123231')
+    //         const response = "";
+    //         axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }}).then((data) => {
+    //             console.log(data,'data daataa')
+    //             response = data;
+    //            })
+    //            .catch((err) => console.log(err,'error in catch'))
+    //         const newRow = [];
+    //         console.log(response,'responseresponse')
+    //         let expiryDates = response.data.records.expiryDates;
+    //         let underlyingValue = response.data.records.underlyingValue;
+    //         selected_expiry = response.data.records.expiryDates[0];
+    //         let option_chain = response && response.data && response.data.records.data.filter(c => {
+    //             return (
+    //                 c.strikePrice <= 800 + (parseInt(underlyingValue / 100) * 100)) &&
+    //               (c.strikePrice >= (parseInt(underlyingValue / 100) * 100) - 800)
+    //             //   && c.expiryDate == expiryDate
+    //           });
         
-              option_chain = JSON.parse(JSON.stringify(option_chain)).map(optionChainAnalysis);
-              option_chain.map((row) => {
-                if(row){
-                    const ceRow = row && row.CE;
-                    const ceaRow = row && row.CE_A;
-                    const peRow = row && row.PE;
-                    const peaRow = row && row.PE_A;
-                    newRow.push([ceRow.strikePrice, ceRow.expiryDate, new Date().toLocaleTimeString(), ceRow.openInterest, ceRow.changeinOpenInterest, ceRow.pchangeinOpenInterest, ceRow.totalTradedVolume, ceRow.impliedVolatility, ceRow.lastPrice, ceRow.change, ceRow.pChange, ceRow.totalBuyQuantity, ceRow.totalSellQuantity, peRow.openInterest, peRow.changeinOpenInterest, peRow.pchangeinOpenInterest, peRow.totalTradedVolume, peRow.impliedVolatility, peRow.lastPrice, peRow.change, peRow.pChange, peRow.totalBuyQuantity, peRow.totalSellQuantity, peRow.underlyingValue, new Date().toLocaleDateString(), ceaRow.trend, ceaRow.i, peaRow.trend, peaRow.i, ceaRow.OI, ceaRow.price, peaRow.OI, peaRow.price]);
-                }
-            });
-            newRow && newRow.length > 0 && saveData(newRow);
-        // }
-    }catch(err){
-        console.log(err,'errrior')
-    }
+    //           option_chain = JSON.parse(JSON.stringify(option_chain)).map(optionChainAnalysis);
+    //           option_chain.map((row) => {
+    //             if(row){
+    //                 const ceRow = row && row.CE;
+    //                 const ceaRow = row && row.CE_A;
+    //                 const peRow = row && row.PE;
+    //                 const peaRow = row && row.PE_A;
+    //                 newRow.push([ceRow.strikePrice, ceRow.expiryDate, new Date().toLocaleTimeString(), ceRow.openInterest, ceRow.changeinOpenInterest, ceRow.pchangeinOpenInterest, ceRow.totalTradedVolume, ceRow.impliedVolatility, ceRow.lastPrice, ceRow.change, ceRow.pChange, ceRow.totalBuyQuantity, ceRow.totalSellQuantity, peRow.openInterest, peRow.changeinOpenInterest, peRow.pchangeinOpenInterest, peRow.totalTradedVolume, peRow.impliedVolatility, peRow.lastPrice, peRow.change, peRow.pChange, peRow.totalBuyQuantity, peRow.totalSellQuantity, peRow.underlyingValue, new Date().toLocaleDateString(), ceaRow.trend, ceaRow.i, peaRow.trend, peaRow.i, ceaRow.OI, ceaRow.price, peaRow.OI, peaRow.price]);
+    //             }
+    //         });
+    //         newRow && newRow.length > 0 && saveData(newRow);
+    //     // }
+    // }catch(err){
+    //     console.log(err,'errrior')
+    // }
+    https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
+  let data = '';
+
+  // A chunk of data has been received.
+  resp.on('data', (chunk) => {
+    data += chunk;
+  });
+
+  // The whole response has been received. Print out the result.
+  resp.on('end', () => {
+    console.log(JSON.parse(data).explanation);
+  });
+
+}).on("error", (err) => {
+  console.log("Error: " + err.message);
+});
+
 },6000);
 
 
