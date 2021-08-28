@@ -1,6 +1,6 @@
 const express = require('express');
 const fs = require('fs');
-const axios = require('axios');
+const axios = require('axios').default;
 var cors = require('cors')
 
 const option_chain = require('./nse_lib');
@@ -160,17 +160,22 @@ setInterval(async() => {
 },6000);
 
 setInterval(async() => {
-    axios.get('https://www.nseindia.com/')
-        .then(res => {
-            console.log(res,'resresresresresresres')
-            return axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY', {
-                headers: {
-                    cookie: res.headers['set-cookie'] // cookie is returned as a header
-                }
+    try{
+        console.log('try');
+        axios.get('https://www.nseindia.com/')
+            .then(res => {
+                console.log(res,'resresresresresresres')
+                return axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY', {
+                    headers: {
+                        cookie: res.headers['set-cookie'] // cookie is returned as a header
+                    }
+                })
             })
-        })
-        .then(res => console.log(res.data,'res.data'))
-        .catch(res => console.error(res.response.data,'res.response.data'))
+            .then(res => console.log(res.data,'res.data'))
+            .catch(res => console.error(res.response.data,'res.response.data'))
+    }catch(err){
+        console.log(err,'new error');
+    }
 },6000);
 
 app.listen(process.env.PORT || 5000, () => console.log(`Example app listening on port ${port}!`))
