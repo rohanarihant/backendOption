@@ -185,13 +185,11 @@ setTimeout(async() => {
 //     .then(res => instance.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY'))
 //     .then(res => console.log(res.data))
 //     .catch(res => console.error(res.response.data))
-    fetch('https://jsonplaceholder.typicode.com/users')
+    fetch('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY')
         .then(res => res.json())
         .then(json => {
             console.log("First user in the array:");
-            console.log(json[0]);
-            console.log("Name of the first user in the array:");
-            console.log(json[0].name);
+            console.log(json);
     });
     }catch(err){
         console.log(err,'new error');
