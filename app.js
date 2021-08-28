@@ -173,7 +173,7 @@ setTimeout(async() => {
                 })
             })
             .then(res => console.log(res.data,'res.data'))
-            .catch(res => console.error(res.response.data,'res.response.data'))
+            .catch(res => console.error(res,'res.response.data'))
     }catch(err){
         console.log(err,'new error');
     }
