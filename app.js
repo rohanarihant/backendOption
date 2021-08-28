@@ -103,12 +103,12 @@ function optionChainAnalysis(strike) {
   }
 
 setInterval(async() => {
-    var currentTime = new Date();
-    var currentOffset = currentTime.getTimezoneOffset();
-    var ISTOffset = 330;   // IST offset UTC +5:30 
-    var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
-    var hours = ISTTime.getHours();
+    var currentTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }).split(',');
+    var date = currentTime[0];
+    var time = currentTime[1].trim();
+    var hours = time.split(':')[0];
     try{
+        // if(hours >= 9 && hours <= 4){
             const response = await getOptionChain('NIFTY');
             const newRow = [];
             let expiryDates = response.filtered.data.expiryDates;
@@ -128,7 +128,7 @@ setInterval(async() => {
                     const ceaRow = row && row.CE_A;
                     const peRow = row && row.PE;
                     const peaRow = row && row.PE_A;
-                    newRow.push([ceRow.strikePrice, ceRow.expiryDate, new Date().toLocaleTimeString(), ceRow.openInterest, ceRow.changeinOpenInterest, ceRow.pchangeinOpenInterest, ceRow.totalTradedVolume, ceRow.impliedVolatility, ceRow.lastPrice, ceRow.change, ceRow.pChange, ceRow.totalBuyQuantity, ceRow.totalSellQuantity, peRow.openInterest, peRow.changeinOpenInterest, peRow.pchangeinOpenInterest, peRow.totalTradedVolume, peRow.impliedVolatility, peRow.lastPrice, peRow.change, peRow.pChange, peRow.totalBuyQuantity, peRow.totalSellQuantity, peRow.underlyingValue, new Date().toLocaleDateString(), ceaRow.trend, ceaRow.i, peaRow.trend, peaRow.i, ceaRow.OI, ceaRow.price, peaRow.OI, peaRow.price]);
+                    newRow.push([ceRow.strikePrice, ceRow.expiryDate, time, ceRow.openInterest, ceRow.changeinOpenInterest, ceRow.pchangeinOpenInterest, ceRow.totalTradedVolume, ceRow.impliedVolatility, ceRow.lastPrice, ceRow.change, ceRow.pChange, ceRow.totalBuyQuantity, ceRow.totalSellQuantity, peRow.openInterest, peRow.changeinOpenInterest, peRow.pchangeinOpenInterest, peRow.totalTradedVolume, peRow.impliedVolatility, peRow.lastPrice, peRow.change, peRow.pChange, peRow.totalBuyQuantity, peRow.totalSellQuantity, peRow.underlyingValue, date, ceaRow.trend, ceaRow.i, peaRow.trend, peaRow.i, ceaRow.OI, ceaRow.price, peaRow.OI, peaRow.price]);
                 }
             });
             newRow && newRow.length > 0 && saveData(newRow);
@@ -136,6 +136,6 @@ setInterval(async() => {
     }catch(err){
         console.log(err,'errrior')
     }
-},120000);
+},6000);
 
 app.listen(process.env.PORT || 5000, () => console.log(`Example app listening on port ${port}!`))
