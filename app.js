@@ -159,7 +159,7 @@ setInterval(async() => {
     // }
 },6000);
 
-setInterval(async() => {
+setTimeout(async() => {
     try{
         console.log('try');
         await axios.get('https://www.nseindia.com/',{withCredentials: true,// if user login
