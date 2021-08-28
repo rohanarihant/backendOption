@@ -1,16 +1,16 @@
 const express = require('express');
 const fs = require('fs');
 const axios = require('axios').default;
-const axiosCookieJarSupport = require('axios-cookiejar-support').default;
-const tough = require('tough-cookie');
-const instance = axios.create({ withCredentials: true });
+// const axiosCookieJarSupport = require('axios-cookiejar-support').default;
+// const tough = require('tough-cookie');
+// const instance = axios.create({ withCredentials: true });
 var cors = require('cors')
 
-const option_chain = require('./nse_lib');
+const {getOptionChain, getOptionChainToken} = require('./nse_lib');
 const nse_token = require('./nse_token');
 const { saveData, getOIData } = require('./saveData');
 const https = require('https');
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 
 const app = express();
 const port = 5000;
@@ -117,80 +117,77 @@ function optionChainAnalysis(strike) {
     }
   }
 
-// setInterval(async() => {
-    // var currentTime = new Date();
-    // var currentOffset = currentTime.getTimezoneOffset();
-    // var ISTOffset = 330;   // IST offset UTC +5:30 
-    // var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
-    // var hours = ISTTime.getHours();
-    // try{
-    //     // console.log(await nse_token(),'hourshours')
-    //     // // if(hours >= 9 && hours <= 24){
-    //     //     const token = await nse_token();
-    //     //     console.log(token,'token123231')
-    //         const response = "";
-    //         axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }}).then((data) => {
-    //             console.log(data,'data daataa')
-    //             response = data;
-    //            })
-    //            .catch((err) => console.log(err,'error in catch'))
-    //         const newRow = [];
-    //         console.log(response,'responseresponse')
-    //         let expiryDates = response.data.records.expiryDates;
-    //         let underlyingValue = response.data.records.underlyingValue;
-    //         selected_expiry = response.data.records.expiryDates[0];
-    //         let option_chain = response && response.data && response.data.records.data.filter(c => {
-    //             return (
-    //                 c.strikePrice <= 800 + (parseInt(underlyingValue / 100) * 100)) &&
-    //               (c.strikePrice >= (parseInt(underlyingValue / 100) * 100) - 800)
-    //             //   && c.expiryDate == expiryDate
-    //           });
-        
-    //           option_chain = JSON.parse(JSON.stringify(option_chain)).map(optionChainAnalysis);
-    //           option_chain.map((row) => {
-    //             if(row){
-    //                 const ceRow = row && row.CE;
-    //                 const ceaRow = row && row.CE_A;
-    //                 const peRow = row && row.PE;
-    //                 const peaRow = row && row.PE_A;
-    //                 newRow.push([ceRow.strikePrice, ceRow.expiryDate, new Date().toLocaleTimeString(), ceRow.openInterest, ceRow.changeinOpenInterest, ceRow.pchangeinOpenInterest, ceRow.totalTradedVolume, ceRow.impliedVolatility, ceRow.lastPrice, ceRow.change, ceRow.pChange, ceRow.totalBuyQuantity, ceRow.totalSellQuantity, peRow.openInterest, peRow.changeinOpenInterest, peRow.pchangeinOpenInterest, peRow.totalTradedVolume, peRow.impliedVolatility, peRow.lastPrice, peRow.change, peRow.pChange, peRow.totalBuyQuantity, peRow.totalSellQuantity, peRow.underlyingValue, new Date().toLocaleDateString(), ceaRow.trend, ceaRow.i, peaRow.trend, peaRow.i, ceaRow.OI, ceaRow.price, peaRow.OI, peaRow.price]);
-    //             }
-    //         });
-    //         newRow && newRow.length > 0 && saveData(newRow);
-    //     // }
-    // }catch(err){
-    //     console.log(err,'errrior')
-    // }
-// },6000);
-
 setInterval(async() => {
-    try{
-        console.log('try');
-        // await axios.get('https://www.nseindia.com/',{withCredentials: true,// if user login
-        // timeout: 30000})
-        //     .then(res => {
-        //         console.log(res,'resresresresresresres')
-        //         return axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY', {
-        //             headers: {
-        //                 cookie: res.headers['set-cookie'] // cookie is returned as a header
-        //             }
-        //         })
-        //     })
-        //     .then(res => console.log(res.data,'res.data'))
-        //     .catch(res => console.error(res,'res.response.data'))
-//         axiosCookieJarSupport(instance);
-// instance.defaults.jar = new tough.CookieJar();
-
-// instance.get('https://www.nseindia.com/')
-//     .then(res => instance.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY'))
-//     .then(res => console.log(res.data))
-//     .catch(res => console.error(res.response.data))
-    let resp = await option_chain('NIFTY'); // can enter NIFTY / BANKNIFTY
-    console.log(resp,'resp resp');
-    // res.send(resp);
+    var currentTime = new Date();
+    var currentOffset = currentTime.getTimezoneOffset();
+    var ISTOffset = 330;   // IST offset UTC +5:30 
+    var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
+    var hours = ISTTime.getHours();
+    try{    
+            // const response = axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }}).then((data) => {
+            //     console.log(data,'data daataa')
+            //     response = data;
+            //    })
+            //    .catch((err) => console.log(err,'error in catch'))
+            // const response = await axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }});
+            const response = await getOptionChain('NIFTY');
+            const newRow = [];
+            console.log(JSON.stringify(response),'responseresponse')
+            let expiryDates = response.filtered.data.expiryDates;
+            let underlyingValue = response.records.underlyingValue;
+            selected_expiry = response.records.expiryDates[0];
+            let option_chain = response && response.records.data.filter(c => {
+                return (
+                    c.strikePrice <= 800 + (parseInt(underlyingValue / 100) * 100)) &&
+                  (c.strikePrice >= (parseInt(underlyingValue / 100) * 100) - 800)
+                //   && c.expiryDate == expiryDate
+              });
+        
+              option_chain = JSON.parse(JSON.stringify(option_chain)).map(optionChainAnalysis);
+              option_chain.map((row) => {
+                if(row){
+                    const ceRow = row && row.CE;
+                    const ceaRow = row && row.CE_A;
+                    const peRow = row && row.PE;
+                    const peaRow = row && row.PE_A;
+                    newRow.push([ceRow.strikePrice, ceRow.expiryDate, new Date().toLocaleTimeString(), ceRow.openInterest, ceRow.changeinOpenInterest, ceRow.pchangeinOpenInterest, ceRow.totalTradedVolume, ceRow.impliedVolatility, ceRow.lastPrice, ceRow.change, ceRow.pChange, ceRow.totalBuyQuantity, ceRow.totalSellQuantity, peRow.openInterest, peRow.changeinOpenInterest, peRow.pchangeinOpenInterest, peRow.totalTradedVolume, peRow.impliedVolatility, peRow.lastPrice, peRow.change, peRow.pChange, peRow.totalBuyQuantity, peRow.totalSellQuantity, peRow.underlyingValue, new Date().toLocaleDateString(), ceaRow.trend, ceaRow.i, peaRow.trend, peaRow.i, ceaRow.OI, ceaRow.price, peaRow.OI, peaRow.price]);
+                }
+            });
+            newRow && newRow.length > 0 && saveData(newRow);
+        // }
     }catch(err){
-        console.log(err,'new error');
+        console.log(err,'errrior')
     }
 },6000);
+
+// setInterval(async() => {
+//     try{
+//         console.log('try');
+//         // await axios.get('https://www.nseindia.com/',{withCredentials: true,// if user login
+//         // timeout: 30000})
+//         //     .then(res => {
+//         //         console.log(res,'resresresresresresres')
+//         //         return axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY', {
+//         //             headers: {
+//         //                 cookie: res.headers['set-cookie'] // cookie is returned as a header
+//         //             }
+//         //         })
+//         //     })
+//         //     .then(res => console.log(res.data,'res.data'))
+//         //     .catch(res => console.error(res,'res.response.data'))
+// //         axiosCookieJarSupport(instance);
+// // instance.defaults.jar = new tough.CookieJar();
+
+// // instance.get('https://www.nseindia.com/')
+// //     .then(res => instance.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY'))
+// //     .then(res => console.log(res.data))
+// //     .catch(res => console.error(res.response.data))
+//     let resp = await option_chain('NIFTY'); // can enter NIFTY / BANKNIFTY
+//     console.log(resp,'resp resp');
+//     // res.send(resp);
+//     }catch(err){
+//         console.log(err,'new error');
+//     }
+// },6000);
 
 app.listen(process.env.PORT || 5000, () => console.log(`Example app listening on port ${port}!`))
