@@ -186,7 +186,8 @@ setInterval(async() => {
 //     .then(res => console.log(res.data))
 //     .catch(res => console.error(res.response.data))
     let resp = await option_chain('NIFTY'); // can enter NIFTY / BANKNIFTY
-    res.send(resp);
+    console.log(resp,'resp resp');
+    // res.send(resp);
     }catch(err){
         console.log(err,'new error');
     }
