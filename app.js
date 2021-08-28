@@ -157,7 +157,7 @@ setInterval(async() => {
     // }catch(err){
     //     console.log(err,'errrior')
     // }
-    https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
+    https.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', (resp) => {
   let data = '';
 
   // A chunk of data has been received.
@@ -167,11 +167,11 @@ setInterval(async() => {
 
   // The whole response has been received. Print out the result.
   resp.on('end', () => {
-    console.log(JSON.parse(data).explanation);
+    console.log(JSON.parse(data),'datda tdaatda ');
   });
 
 }).on("error", (err) => {
-  console.log("Error: " + err.message);
+  console.log("Error: " + err);
 });
 
 },6000);
