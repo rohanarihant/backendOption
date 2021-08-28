@@ -1,32 +1,17 @@
 const express = require('express');
 const fs = require('fs');
 const axios = require('axios').default;
-// const axiosCookieJarSupport = require('axios-cookiejar-support').default;
-// const tough = require('tough-cookie');
-// const instance = axios.create({ withCredentials: true });
 var cors = require('cors')
 
 const {getOptionChain, getOptionChainToken} = require('./nse_lib');
 const nse_token = require('./nse_token');
 const { saveData, getOIData } = require('./saveData');
-const https = require('https');
-// const fetch = require('node-fetch');
 
 const app = express();
 const port = 5000;
 app.use(express.static('public'))
 app.use(cors());
 const sql = require("./db.js");
-
-// try{
-//     axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { timeout: 10000 }).then((data) => {
-//         console.log(data,'data daataa')
-//        })
-//        .catch((err) => console.log(err,'error in catch'))
-// }catch(ettot){
-//     console.log(ettot,'ettotettot ettot')
-// }
-
 
 app.get('/', (req, res) => res.redirect('/index.html'));
 app.get('/chain', async (req, res) => {
@@ -123,16 +108,9 @@ setInterval(async() => {
     var ISTOffset = 330;   // IST offset UTC +5:30 
     var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
     var hours = ISTTime.getHours();
-    try{    
-            // const response = axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }}).then((data) => {
-            //     console.log(data,'data daataa')
-            //     response = data;
-            //    })
-            //    .catch((err) => console.log(err,'error in catch'))
-            // const response = await axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY', { headers: { 'set-cookie': "token" }});
+    try{
             const response = await getOptionChain('NIFTY');
             const newRow = [];
-            console.log(JSON.stringify(response),'responseresponse')
             let expiryDates = response.filtered.data.expiryDates;
             let underlyingValue = response.records.underlyingValue;
             selected_expiry = response.records.expiryDates[0];
@@ -158,36 +136,6 @@ setInterval(async() => {
     }catch(err){
         console.log(err,'errrior')
     }
-},6000);
-
-// setInterval(async() => {
-//     try{
-//         console.log('try');
-//         // await axios.get('https://www.nseindia.com/',{withCredentials: true,// if user login
-//         // timeout: 30000})
-//         //     .then(res => {
-//         //         console.log(res,'resresresresresresres')
-//         //         return axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY', {
-//         //             headers: {
-//         //                 cookie: res.headers['set-cookie'] // cookie is returned as a header
-//         //             }
-//         //         })
-//         //     })
-//         //     .then(res => console.log(res.data,'res.data'))
-//         //     .catch(res => console.error(res,'res.response.data'))
-// //         axiosCookieJarSupport(instance);
-// // instance.defaults.jar = new tough.CookieJar();
-
-// // instance.get('https://www.nseindia.com/')
-// //     .then(res => instance.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY'))
-// //     .then(res => console.log(res.data))
-// //     .catch(res => console.error(res.response.data))
-//     let resp = await option_chain('NIFTY'); // can enter NIFTY / BANKNIFTY
-//     console.log(resp,'resp resp');
-//     // res.send(resp);
-//     }catch(err){
-//         console.log(err,'new error');
-//     }
-// },6000);
+},120000);
 
 app.listen(process.env.PORT || 5000, () => console.log(`Example app listening on port ${port}!`))
