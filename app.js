@@ -10,6 +10,7 @@ const option_chain = require('./nse_lib');
 const nse_token = require('./nse_token');
 const { saveData, getOIData } = require('./saveData');
 const https = require('https');
+const fetch = require('node-fetch');
 
 const app = express();
 const port = 5000;
@@ -116,7 +117,7 @@ function optionChainAnalysis(strike) {
     }
   }
 
-setInterval(async() => {
+// setInterval(async() => {
     // var currentTime = new Date();
     // var currentOffset = currentTime.getTimezoneOffset();
     // var ISTOffset = 330;   // IST offset UTC +5:30 
@@ -160,7 +161,7 @@ setInterval(async() => {
     // }catch(err){
     //     console.log(err,'errrior')
     // }
-},6000);
+// },6000);
 
 setTimeout(async() => {
     try{
@@ -177,13 +178,21 @@ setTimeout(async() => {
         //     })
         //     .then(res => console.log(res.data,'res.data'))
         //     .catch(res => console.error(res,'res.response.data'))
-        axiosCookieJarSupport(instance);
-instance.defaults.jar = new tough.CookieJar();
+//         axiosCookieJarSupport(instance);
+// instance.defaults.jar = new tough.CookieJar();
 
-instance.get('https://www.nseindia.com/')
-    .then(res => instance.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY'))
-    .then(res => console.log(res.data))
-    .catch(res => console.error(res.response.data))
+// instance.get('https://www.nseindia.com/')
+//     .then(res => instance.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY'))
+//     .then(res => console.log(res.data))
+//     .catch(res => console.error(res.response.data))
+    fetch('https://jsonplaceholder.typicode.com/users')
+        .then(res => res.json())
+        .then(json => {
+            console.log("First user in the array:");
+            console.log(json[0]);
+            console.log("Name of the first user in the array:");
+            console.log(json[0].name);
+    });
     }catch(err){
         console.log(err,'new error');
     }
