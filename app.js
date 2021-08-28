@@ -1,6 +1,9 @@
 const express = require('express');
 const fs = require('fs');
 const axios = require('axios').default;
+const axiosCookieJarSupport = require('axios-cookiejar-support').default;
+const tough = require('tough-cookie');
+const instance = axios.create({ withCredentials: true });
 var cors = require('cors')
 
 const option_chain = require('./nse_lib');
@@ -162,18 +165,25 @@ setInterval(async() => {
 setTimeout(async() => {
     try{
         console.log('try');
-        await axios.get('https://www.nseindia.com/',{withCredentials: true,// if user login
-        timeout: 30000})
-            .then(res => {
-                console.log(res,'resresresresresresres')
-                return axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY', {
-                    headers: {
-                        cookie: res.headers['set-cookie'] // cookie is returned as a header
-                    }
-                })
-            })
-            .then(res => console.log(res.data,'res.data'))
-            .catch(res => console.error(res,'res.response.data'))
+        // await axios.get('https://www.nseindia.com/',{withCredentials: true,// if user login
+        // timeout: 30000})
+        //     .then(res => {
+        //         console.log(res,'resresresresresresres')
+        //         return axios.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY', {
+        //             headers: {
+        //                 cookie: res.headers['set-cookie'] // cookie is returned as a header
+        //             }
+        //         })
+        //     })
+        //     .then(res => console.log(res.data,'res.data'))
+        //     .catch(res => console.error(res,'res.response.data'))
+        axiosCookieJarSupport(instance);
+instance.defaults.jar = new tough.CookieJar();
+
+instance.get('https://www.nseindia.com/')
+    .then(res => instance.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY'))
+    .then(res => console.log(res.data))
+    .catch(res => console.error(res.response.data))
     }catch(err){
         console.log(err,'new error');
     }
