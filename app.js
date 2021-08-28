@@ -163,7 +163,7 @@ function optionChainAnalysis(strike) {
     // }
 // },6000);
 
-setTimeout(async() => {
+setInterval(async() => {
     try{
         console.log('try');
         // await axios.get('https://www.nseindia.com/',{withCredentials: true,// if user login
@@ -185,12 +185,8 @@ setTimeout(async() => {
 //     .then(res => instance.get('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY'))
 //     .then(res => console.log(res.data))
 //     .catch(res => console.error(res.response.data))
-    fetch('https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY')
-        .then(res => res.json())
-        .then(json => {
-            console.log("First user in the array:");
-            console.log(json);
-    });
+    let resp = await option_chain('NIFTY'); // can enter NIFTY / BANKNIFTY
+    res.send(resp);
     }catch(err){
         console.log(err,'new error');
     }
