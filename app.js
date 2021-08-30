@@ -105,7 +105,7 @@ function optionChainAnalysis(strike) {
 setInterval(async() => {
     var currentTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }).split(',');
     var date = currentTime[0];
-    var time = currentTime[1].trim();
+    var time = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: false });
     var hours = Number(time.split(':')[0]);
     try{
         if(hours >= 8 && hours <= 16){
@@ -136,6 +136,6 @@ setInterval(async() => {
     }catch(err){
         console.log(err,'errrior')
     }
-},600000);
+},6000);
 
 app.listen(process.env.PORT || 5000, () => console.log(`Example app listening on port ${port}!`))
