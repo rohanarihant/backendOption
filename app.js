@@ -106,9 +106,9 @@ setInterval(async() => {
     var currentTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }).split(',');
     var date = currentTime[0];
     var time = currentTime[1].trim();
-    var hours = time.split(':')[0];
+    var hours = Number(time.split(':')[0]);
     try{
-        // if(hours >= 9 && hours <= 4){
+        if(hours >= 8 && hours <= 16){
             const response = await getOptionChain('NIFTY');
             const newRow = [];
             let expiryDates = response.filtered.data.expiryDates;
@@ -132,10 +132,10 @@ setInterval(async() => {
                 }
             });
             newRow && newRow.length > 0 && saveData(newRow);
-        // }
+        }
     }catch(err){
         console.log(err,'errrior')
     }
-},120000);
+},600000);
 
 app.listen(process.env.PORT || 5000, () => console.log(`Example app listening on port ${port}!`))
