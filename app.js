@@ -51,6 +51,18 @@ app.get('/getAllsavedTimes', async (req, res) => {
     }
 });
 
+app.get('/getAllsavedDataForToday', async (req, res) => {
+    const { selectedDate } = req.query;
+    try{
+        sql.query(`SELECT * FROM nifty WHERE date  = "${selectedDate}"`, (err, results) => {
+            if (err) throw err;
+            res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+        });
+    }catch(err){
+        res.status(500).send(err);
+    }
+});
+
 app.get('/getAllexpiries', async (req, res) => {
     try{
         sql.query(`SELECT DISTINCT expiryDate FROM nifty`, (err, results) => {
