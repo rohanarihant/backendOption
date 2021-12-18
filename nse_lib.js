@@ -34,6 +34,7 @@ function getOptionChain(instrument, token) {
     -H 'sec-fetch-dest: document' \
     -H 'accept-language: en-IN,en;q=0.9,en-GB;q=0.8,en-US;q=0.7,hi;q=0.6,mr;q=0.5' \
     --compressed`, function (resp) {
+      console.log(resp,'resprespresprespresp')
       let isValidData = isJson(resp);
       if (isValidData) {
         resolve(isValidData);
