@@ -8,10 +8,10 @@ const mysql = require("mysql");
 //     database: "option_chain"
 // });
 var connection = mysql.createConnection({
-  host : 'node-option-chain.cxy9wu3sxd3e.us-east-2.rds.amazonaws.com',
+  host : 'optionchain.csf8cb17aqta.us-east-2.rds.amazonaws.com',
   user      : 'root',
   password  : 'roottoor',
-  database  : 'option_chain'
+  database  : 'optionchain'
 });
 
 // open the MySQL connection
