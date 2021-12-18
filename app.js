@@ -148,6 +148,6 @@ setInterval(async() => {
     }catch(err){
         console.log(err,'errrior')
     }
-},600000);
+},6000);
 
-app.listen(process.env.PORT || 5000, () => console.log(`Example app listening on port ${port}!`))
+app.listen(process.env.PORT || 80, () => console.log(`Example app listening on port ${port}!`))
