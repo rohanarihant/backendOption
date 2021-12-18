@@ -123,6 +123,7 @@ setInterval(async() => {
         console.log(hours,'hours')
         // if(hours >= 8 && hours <= 16){
             const response = await getOptionChain('NIFTY');
+            console.log(response,'responseresponseresponse')
             const newRow = [];
             let expiryDates = response.filtered.data.expiryDates;
             let underlyingValue = response.records.underlyingValue;
