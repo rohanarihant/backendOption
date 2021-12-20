@@ -16,7 +16,6 @@ const sql = require("./db.js");
 app.get('/', (req, res) => res.redirect('/index.html'));
 app.get('/chain', async (req, res) => {
     try{
-        console.log(req.rawHeaders,'req.rawHeaders')
         let resp = await option_chain('NIFTY', req.rawHeaders[3]); // can enter NIFTY / BANKNIFTY
         res.send(resp);
     }catch(err){
@@ -120,10 +119,8 @@ setInterval(async() => {
     var time = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: false });
     var hours = Number(time.split(':')[0]);
     try{
-        console.log(hours,'hours')
-        // if(hours >= 8 && hours <= 16){
+        if(hours >= 8 && hours <= 16){
             const response = await getOptionChain('NIFTY');
-            console.log(response,'responseresponseresponse')
             const newRow = [];
             let expiryDates = response.filtered.data.expiryDates;
             let underlyingValue = response.records.underlyingValue;
@@ -146,7 +143,7 @@ setInterval(async() => {
                 }
             });
             newRow && newRow.length > 0 && saveData(newRow);
-        // }
+        }
     }catch(err){
         console.log(err,'errrior')
     }

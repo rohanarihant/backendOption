@@ -34,7 +34,6 @@ function getOptionChain(instrument, token) {
     -H 'sec-fetch-dest: document' \
     -H 'accept-language: en-IN,en;q=0.9,en-GB;q=0.8,en-US;q=0.7,hi;q=0.6,mr;q=0.5' \
     --compressed`, function (resp) {
-      console.log(resp,'resprespresprespresp')
       let isValidData = isJson(resp);
       if (isValidData) {
         resolve(isValidData);
@@ -61,16 +60,14 @@ function getOptionChainToken() {
     -H 'sec-fetch-dest: document' \
     -H 'accept-language: en-IN,en;q=0.9,en-GB;q=0.8,en-US;q=0.7,hi;q=0.6,mr;q=0.5' \
     --compressed`, function (response) {
-      console.log(response && response.headers,'response response')
-      // cookie = response.headers['set-cookie'];
-      // return resolve(response.headers['set-cookie'][1].split(';')[0]);
-      // let isValidData = isJson(resp);
-      // console.log(isValidData,'isValidData')
-      // if (isValidData) {
-      //   resolve(isValidData);
-      // } else {
-      //   resolve();
-      // }
+      cookie = response.headers['set-cookie'];
+      return resolve(response.headers['set-cookie'][1].split(';')[0]);
+      let isValidData = isJson(resp);
+      if (isValidData) {
+        resolve(isValidData);
+      } else {
+        resolve();
+      }
     });
 
   });
